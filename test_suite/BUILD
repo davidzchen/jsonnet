@@ -1,0 +1,112 @@
+load("/tools/build_defs/jsonnet_test/jsonnet_suite_test", "jsonnet_suite_test")
+
+package(default_visibility = ["//visibility:public"])
+
+TESTS = [
+    "arith_bool",
+    "arith_float",
+    "arith_string",
+    "array",
+    "comments",
+    "condition",
+    "dos_line_endings",
+    "format",
+    "functions",
+    "import",
+    "invariant",
+    "local",
+    "null",
+    "object",
+    "oop",
+    "oop_extra",
+    "precedence",
+    "recursive_function",
+    "recursive_import_ok",
+    "recursive_object",
+    "stdlib",
+    "text_block",
+    "unix_line_endings",
+]
+
+[jsonnet_suite_test(
+    name = test + "_test",
+    src = test + ".jsonnet",
+) for test in TESTS]
+
+GOLDEN_TESTS = [
+    "invariant_manifest",
+    "sanity",
+    "sanity2",
+    "unparse",
+]
+
+[jsonnet_suite_test(
+    name = test + "_test",
+    src = test + ".jsonnet",
+    golden = test + ".jsonnet.golden",
+) for test in TESTS]
+
+ERROR_TESTS = [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "array_recursive_manifest",
+    "assert_fail1",
+    "assert_fail2",
+    "computed_field_scope",
+    "divide_zero",
+    "field_not_exist",
+    "function_duplicate_param",
+    "import_empty",
+    "import_folder",
+    "import_folder_slash",
+    "inside_equals_array",
+    "inside_equals_object",
+    "inside_tostring_array",
+    "inside_tostring_object",
+    "invariant_avoid_output_change",
+    "invariant_equality",
+    "invariant_option",
+    "invariant_simple",
+    "invariant_simple2",
+    "invariant_simple3",
+    "method_plus",
+    "obj_recursive",
+    "obj_recursive_manifest",
+    "object_comprehension_local",
+    "object_comprehension_local_clash",
+    "object_local_clash",
+    "overflow",
+    "overflow2",
+    "overflow3",
+    "recursive_function_nonterm",
+    "recursive_import",
+    "recursive_object_non_term",
+    "sanity",
+    "self_in_computed_field",
+    "static_error_bad_number",
+    "static_error_self",
+    "static_error_super",
+    "static_error_var_not_exist",
+    "std_makeArray_negative",
+    "string_invalid_escape",
+    "string_invalid_escape_unicode_ascii",
+    "string_invalid_escape_unicode_non_hex",
+    "string_invalid_escape_unicode_short",
+    "string_invalid_escape_unicode_short2",
+    "string_invalid_escape_unicode_short3",
+    "string_unfinished",
+    "text_block_bad_whitespace",
+    "text_block_eof",
+    "text_block_not_terminated",
+]
+
+[jsonnet_suite_test(
+    name = "error_" + test + "_test",
+    src = "error." + test + ".jsonnet",
+    golden = "error." + test + ".jsonnet.golden",
+) for test in ERROR_TESTS]
