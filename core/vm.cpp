@@ -17,6 +17,8 @@ limitations under the License.
 #include "core/vm.h"
 
 #include <cassert>
+#include <cstring>
+#include <fstream>
 #include <cmath>
 #include <set>
 #include <string>
@@ -2281,7 +2283,182 @@ namespace {
         }
 
     };
+}  // namespace
 
+static void memory_panic(void)
+{
+    fputs("FATAL ERROR: A memory allocation error occurred.\n", stderr);
+    abort();
+}
+
+static char *from_string(Vm* vm, const std::string &v)
+{
+    char *r = vm->realloc(nullptr, v.length() + 1);
+    std::strcpy(r, v.c_str());
+    return r;
+}
+
+/** Resolve the absolute path and use C++ file io to load the file.
+ */
+static char *default_import_callback(void *ctx, const char *base, const char *file,
+                                     char **found_here_cptr, int *success)
+{
+    auto *vm = static_cast<Vm*>(ctx);
+
+    if (std::strlen(file) == 0) {
+        *success = 0;
+        return from_string(vm, "The empty string is not a valid filename");
+    }
+
+    if (file[std::strlen(file) - 1] == '/') {
+        *success = 0;
+        return from_string(vm, "Attempted to import a directory");
+    }
+
+    std::string abs_path;
+    // It is possible that file is an absolute path
+    if (file[0] == '/')
+        abs_path = file;
+    else
+        abs_path = std::string(base) + file;
+
+    std::ifstream f;
+    f.open(abs_path.c_str());
+    if (!f.good()) {
+        *success = 0;
+        return from_string(vm, std::strerror(errno));
+    }
+    try {
+        std::string input;
+        input.assign(std::istreambuf_iterator<char>(f), std::istreambuf_iterator<char>());
+        *success = 1;
+        *found_here_cptr = from_string(vm, abs_path);
+        return from_string(vm, input);
+    } catch (const std::ios_base::failure &io_err) {
+        *success = 0;
+        return from_string(vm, io_err.what());
+    }
+}
+
+Vm::Vm(void)
+    : gcGrowthTrigger(2.0), maxStack(500), gcMinObjects(1000), debugAst(false), maxTrace(20),
+      importCallback(default_import_callback), importCallbackContext(this),
+      stringOutput(false)
+{ }
+
+char *Vm::evaluate_snippet_aux(const char *filename, const char *snippet, int *error,
+                               bool multi)
+{
+    try {
+        Allocator alloc;
+        AST *expr = jsonnet_parse(&alloc, filename, snippet);
+        std::string json_str;
+        std::map<std::string, std::string> files;
+        jsonnet_desugar(&alloc, expr);
+        if (debugAst) {
+            json_str = jsonnet_unparse_jsonnet(expr);
+        } else {
+            jsonnet_static_analysis(expr);
+            if (multi) {
+                files = jsonnet_vm_execute_multi(&alloc, expr, ext, maxStack,
+                                                 gcMinObjects, gcGrowthTrigger,
+                                                 importCallback, importCallbackContext,
+                                                 stringOutput);
+            } else {
+                json_str = jsonnet_vm_execute(&alloc, expr, ext, maxStack,
+                                              gcMinObjects, gcGrowthTrigger,
+                                              importCallback, importCallbackContext,
+                                              stringOutput);
+            }
+        }
+        if (multi) {
+            size_t sz = 1; // final sentinel
+            for (const auto &pair : files) {
+                sz += pair.first.length() + 1; // include sentinel
+                sz += pair.second.length() + 2; // Add a '\n' as well as sentinel
+            }
+            char *buf = (char*)::malloc(sz);
+            if (buf == nullptr) memory_panic();
+            std::ptrdiff_t i = 0;
+            for (const auto &pair : files) {
+                memcpy(&buf[i], pair.first.c_str(), pair.first.length() + 1);
+                i += pair.first.length() + 1;
+                memcpy(&buf[i], pair.second.c_str(), pair.second.length());
+                i += pair.second.length();
+                buf[i] = '\n';
+                i++;
+                buf[i] = '\0';
+                i++;
+            }
+            buf[i] = '\0'; // final sentinel
+            *error = false;
+            return buf;
+        } else {
+            json_str += "\n";
+            *error = false;
+            return from_string(this, json_str);
+        }
+
+    } catch (StaticError &e) {
+        std::stringstream ss;
+        ss << "STATIC ERROR: " << e << std::endl;
+        *error = true;
+        return from_string(this, ss.str());
+
+    } catch (RuntimeError &e) {
+        std::stringstream ss;
+        ss << "RUNTIME ERROR: " << e.msg << std::endl;
+        const long max_above = maxTrace / 2;
+        const long max_below = maxTrace - max_above;
+        const long sz = e.stackTrace.size();
+        for (long i = 0 ; i < sz ; ++i) {
+            const auto &f = e.stackTrace[i];
+            if (maxTrace > 0 && i >= max_above && i < sz - max_below) {
+                if (i == max_above)
+                    ss << "\t..." << std::endl;
+            } else {
+                ss << "\t" << f.location << "\t" << f.name << std::endl;
+            }
+        }
+        *error = true;
+        return from_string(this, ss.str());
+    }
+}
+
+char *Vm::evaluate_file_aux(const char *filename, int *error, bool multi)
+{
+    std::ifstream f;
+    f.open(filename);
+    if (!f.good()) {
+        std::stringstream ss;
+        ss << "Opening input file: " << filename << ": " << strerror(errno);
+        *error = true;
+        return from_string(this, ss.str());
+    }
+    std::string input;
+    input.assign(std::istreambuf_iterator<char>(f),
+                 std::istreambuf_iterator<char>());
+
+    return evaluate_snippet_aux(filename, input.c_str(), error, multi);
+}
+
+char* Vm::realloc(char* str, size_t sz)
+{
+    if (str == nullptr) {
+        if (sz == 0) return nullptr;
+        auto *r = static_cast<char*>(::malloc(sz));
+        if (r == nullptr) memory_panic();
+        return r;
+    } else {
+        if (sz == 0) {
+            ::free(str);
+            return nullptr;
+        } else {
+            auto *r = static_cast<char*>(::realloc(str, sz));
+            if (r == nullptr) memory_panic();
+            return r;
+        }
+    }
 }
 
 std::string jsonnet_vm_execute(Allocator *alloc, const AST *ast,

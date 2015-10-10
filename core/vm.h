@@ -51,6 +51,24 @@ struct VmExt {
     { }
 };
 
+struct Vm {
+    Vm(void);
+
+    char *evaluate_snippet_aux(const char *filename, const char *snippet, int *error, bool multi);
+    char *evaluate_file_aux(const char *filename, int *error, bool multi);
+    char *realloc(char *str, size_t sz);
+
+    double gcGrowthTrigger;
+    unsigned maxStack;
+    unsigned gcMinObjects;
+    bool debugAst;
+    unsigned maxTrace;
+    std::map<std::string, VmExt> ext;
+    JsonnetImportCallback *importCallback;
+    void *importCallbackContext;
+    bool stringOutput;
+};
+
 
 /** Execute the program and return the value as a JSON string.
  *

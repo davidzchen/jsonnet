@@ -17,14 +17,14 @@ genrule(
 # TODO(dzc): Remove the includes = ["."] lines from all cc_* targets once
 # bazelbuild/bazel#445 is fixed.
 cc_library(
-    name = "jsonnet-common",
+    name = "jsonnet-core",
     srcs = [
         "core/desugaring.cpp",
+        "core/libjsonnet.cpp",
         "core/lexer.cpp",
         "core/parser.cpp",
         "core/static_analysis.cpp",
         "core/vm.cpp",
-        "stdlib/std.jsonnet.h",
     ],
     hdrs = [
         "core/desugaring.h",
@@ -35,13 +35,22 @@ cc_library(
         "core/vm.h",
     ],
     includes = ["."],
+    linkopts = ["-lm"],
 )
 
 cc_library(
     name = "libjsonnet",
     srcs = ["core/libjsonnet.cpp"],
     hdrs = ["core/libjsonnet.h"],
-    deps = [":jsonnet-common"],
+    deps = [":jsonnet-core"],
+    includes = ["."],
+)
+
+cc_library(
+    name = "jsonnet-cpp",
+    srcs = ["cpp/jsonnet.cc"],
+    hdrs = ["cpp/jsonnet.h"],
+    deps = [":jsonnet-core"],
     includes = ["."],
 )
 
@@ -78,6 +87,28 @@ sh_test(
         ":jsonnet",
         ":libjsonnet_test_snippet",
         ":libjsonnet_test_file",
+        ":object_jsonnet",
+    ],
+)
+
+cc_binary(
+    name = "libjsonnet_cpp_test_snippet",
+    srcs = ["cpp/libjsonnet_cpp_test_snippet.cc"],
+    deps = [":jsonnet-cpp"],
+)
+
+cc_binary(
+    name = "libjsonnet_cpp_test_file",
+    srcs = ["cpp/libjsonnet_cpp_test_file.cc"],
+    deps = [":jsonnet-cpp"],
+)
+
+sh_test(
+    name = "libjsonnet_cpp_test",
+    srcs = ["cpp/libjsonnet_cpp_test.sh"],
+    data = [
+        ":libjsonnet_cpp_test_snippet",
+        ":libjsonnet_cpp_test_file",
         ":object_jsonnet",
     ],
 )

@@ -47,17 +47,27 @@ LIB_SRC = \
 	core/libjsonnet.cpp \
 	core/parser.cpp \
 	core/static_analysis.cpp \
-	core/vm.cpp
+	core/vm.cpp \
+	core/libjsonnet.cpp
+
 LIB_OBJ = $(LIB_SRC:.cpp=.o)
+
+LIB_CPP_SRC = \
+	$(LIB_SRC) \
+	cpp/jsonnet.cc
+
+LIB_CPP_OBJ = $(LIB_CPP_SRC:.cpp=.o)
 
 ALL = \
 	jsonnet \
 	libjsonnet.so \
+	libjsonnet-cpp.so \
 	libjsonnet_test_snippet \
 	libjsonnet_test_file \
 	libjsonnet.js \
 	doc/libjsonnet.js \
 	$(LIB_OBJ)
+
 ALL_HEADERS = \
 	core/ast.h \
 	core/desugaring.h \
@@ -68,6 +78,7 @@ ALL_HEADERS = \
 	core/static_analysis.h \
 	core/static_error.h \
 	core/vm.h \
+	cpp/jsonnet.h \
 	stdlib/std.jsonnet.h
 
 default: jsonnet
@@ -104,6 +115,9 @@ jsonnet: cmd/jsonnet.cpp $(LIB_OBJ)
 # C binding.
 libjsonnet.so: $(LIB_OBJ)
 	$(CXX) $(LDFLAGS) $(LIB_OBJ) $(SHARED_LDFLAGS) -o $@
+
+libjsonnet-cpp.so: $(LIB_CPP_OBJ)
+	$(CXX) $(LDFLAGS) $(LIB_CPP_OBJ) $(SHARED_LDFLAGS) -o $@
 
 # Javascript build of C binding
 JS_EXPORTED_FUNCTIONS = 'EXPORTED_FUNCTIONS=["_jsonnet_make", "_jsonnet_evaluate_snippet", "_jsonnet_realloc", "_jsonnet_destroy"]'
