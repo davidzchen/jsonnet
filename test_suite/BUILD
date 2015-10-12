@@ -2,6 +2,12 @@ load("/tools/build_defs/jsonnet/jsonnet", "jsonnet_test")
 
 package(default_visibility = ["//visibility:public"])
 
+# Used by //:libjsonnet_test
+filegroup(
+    name = "object_jsonnet",
+    srcs = ["object.jsonnet"],
+)
+
 TESTS = [
     "arith_bool",
     "arith_float",
@@ -44,7 +50,7 @@ GOLDEN_TESTS = [
     name = test + "_test",
     src = test + ".jsonnet",
     golden = test + ".jsonnet.golden",
-) for test in TESTS]
+) for test in GOLDEN_TESTS]
 
 ERROR_TESTS = [
     "01",
@@ -62,7 +68,6 @@ ERROR_TESTS = [
     "field_not_exist",
     "function_duplicate_param",
     "import_empty",
-    "import_folder",
     "import_folder_slash",
     "inside_equals_array",
     "inside_equals_object",
@@ -109,4 +114,17 @@ ERROR_TESTS = [
     name = "error_" + test + "_test",
     src = "error." + test + ".jsonnet",
     golden = "error." + test + ".jsonnet.golden",
+    error = 1,
 ) for test in ERROR_TESTS]
+
+ERROR_REGEX_TESTS = [
+    "import_folder",
+]
+
+[jsonnet_test(
+    name = "error_" + test + "_test",
+    src = "error." + test + ".jsonnet",
+    golden = "error." + test + ".jsonnet.golden_regex",
+    error = 1,
+    regex = 1,
+) for test in ERROR_REGEX_TESTS]

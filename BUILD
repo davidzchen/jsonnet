@@ -64,11 +64,6 @@ cc_binary(
     includes = ["."],
 )
 
-filegroup(
-    name = "object_jsonnet",
-    srcs = ["test_suite/object.jsonnet"],
-)
-
 sh_test(
     name = "libjsonnet_test",
     srcs = ["core/libjsonnet_test.sh"],
@@ -76,6 +71,6 @@ sh_test(
         ":jsonnet",
         ":libjsonnet_test_snippet",
         ":libjsonnet_test_file",
-        ":object_jsonnet",
+        "//test_suite:object_jsonnet",
     ],
 )
