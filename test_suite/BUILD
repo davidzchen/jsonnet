@@ -1,4 +1,4 @@
-load("/tools/build_defs/jsonnet_test/jsonnet_suite_test", "jsonnet_suite_test")
+load("/tools/build_defs/jsonnet/jsonnet", "jsonnet_test")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -28,7 +28,7 @@ TESTS = [
     "unix_line_endings",
 ]
 
-[jsonnet_suite_test(
+[jsonnet_test(
     name = test + "_test",
     src = test + ".jsonnet",
 ) for test in TESTS]
@@ -40,7 +40,7 @@ GOLDEN_TESTS = [
     "unparse",
 ]
 
-[jsonnet_suite_test(
+[jsonnet_test(
     name = test + "_test",
     src = test + ".jsonnet",
     golden = test + ".jsonnet.golden",
@@ -105,7 +105,7 @@ ERROR_TESTS = [
     "text_block_not_terminated",
 ]
 
-[jsonnet_suite_test(
+[jsonnet_test(
     name = "error_" + test + "_test",
     src = "error." + test + ".jsonnet",
     golden = "error." + test + ".jsonnet.golden",
