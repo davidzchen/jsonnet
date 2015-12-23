@@ -1,0 +1,75 @@
+$body-font-family: "RobotoDraft", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$code-font-family: "Source Code Pro", "Menlo", "Monaco", monospace;
+$logo-font-family: "Droid Sans Mono";
+
+body {
+  font-family: $body-font-family;
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
+
+$navbar-bg-color: #37474F;
+$navbar-active-bg-color: #263238;
+$navbar-color: #CFD8DC;
+$navbar-active-color: #fce8b2;
+$navbar-logo-color: #fce8b2;
+
+.navbar-inverse {
+  margin-bottom: 0;
+  background-color: $navbar-bg-color;
+  border-bottom: 1px solid $navbar-bg-color;
+
+  a.navbar-brand {
+    font-family: $logo-font-family;
+    font-weight: 300;
+
+    &:link,
+    &:active,
+    &:visited {
+      color: $navbar-logo-color;
+    }
+
+    &:focus,
+    &:hover {
+      color: $navbar-logo-color;
+      text-decoration: none;
+    }
+
+    .logo-braces {
+      color: $navbar-color;
+    }
+  }
+
+  .navbar-nav > li > a {
+    color: $navbar-color;
+    font-weight: 300;
+
+    &:focus,
+    &:hover {
+      color: $navbar-active-color;
+      text-decoration: none;
+    }
+  }
+
+  .navbar-nav > .open > a {
+    &:link,
+    &:focus,
+    &:hover {
+      background-color: $navbar-active-bg-color;
+      color: $navbar-active-color;
+    }
+  }
+
+  .navbar-nav > li.active > a {
+    background-color: $navbar-active-bg-color;
+    color: $navbar-active-color;
+    font-weight: 300;
+
+    &:focus,
+    &:hover {
+      background-color: $navbar-active-bg-color;
+      color: $navbar-active-color;
+      text-decoration: none;
+    }
+  }
+}
