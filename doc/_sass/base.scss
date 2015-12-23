@@ -1,6 +1,6 @@
-$body-font-family: "RobotoDraft", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$body-font-family: "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 $code-font-family: "Source Code Pro", "Menlo", "Monaco", monospace;
-$logo-font-family: "Droid Sans Mono";
+$logo-font-family: "Droid Sans";
 
 body {
   font-family: $body-font-family;
@@ -21,7 +21,7 @@ $navbar-logo-color: #fce8b2;
 
   a.navbar-brand {
     font-family: $logo-font-family;
-    font-weight: 300;
+    font-weight: 400;
 
     &:link,
     &:active,
@@ -42,6 +42,7 @@ $navbar-logo-color: #fce8b2;
 
   .navbar-nav > li > a {
     color: $navbar-color;
+    font-family: $logo-font-family;
     font-weight: 300;
 
     &:focus,
