@@ -1,13 +1,22 @@
-$body-font-family: "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 $code-font-family: "Source Code Pro", "Menlo", "Monaco", monospace;
-$logo-font-family: "Droid Sans";
 
 body {
-  font-family: $body-font-family;
   padding-top: 50px;
   padding-bottom: 20px;
 }
 
+pre {
+  border: 0px !important;
+  border-radius: 0px !important;
+  overflow-x: auto;
+
+  code {
+    overflow-wrap: normal;
+    white-space: pre;
+  }
+}
+
+// Navbar styles
 $navbar-bg-color: #37474F;
 $navbar-active-bg-color: #263238;
 $navbar-color: #CFD8DC;
@@ -20,7 +29,6 @@ $navbar-logo-color: #fce8b2;
   border-bottom: 1px solid $navbar-bg-color;
 
   a.navbar-brand {
-    font-family: $logo-font-family;
     font-weight: 400;
 
     &:link,
@@ -42,7 +50,6 @@ $navbar-logo-color: #fce8b2;
 
   .navbar-nav > li > a {
     color: $navbar-color;
-    font-family: $logo-font-family;
     font-weight: 300;
 
     &:focus,
