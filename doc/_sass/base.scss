@@ -81,3 +81,15 @@ $navbar-logo-color: #fce8b2;
     }
   }
 }
+
+.feature {
+  padding: 80px 0;
+
+  &.feature-default {
+    background-color: #f7f7f7;
+  }
+
+  &.feature-alt {
+    background-color: #fff;
+  }
+}
