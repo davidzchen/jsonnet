@@ -9,6 +9,7 @@ pre {
   border: 0px !important;
   border-radius: 0px !important;
   overflow-x: auto;
+  padding: 15px;
 
   code {
     overflow-wrap: normal;
@@ -17,11 +18,11 @@ pre {
 }
 
 // Navbar styles
-$navbar-bg-color: #37474F;
+$navbar-bg-color: #37474f;
 $navbar-active-bg-color: #263238;
 $navbar-color: #CFD8DC;
-$navbar-active-color: #fce8b2;
-$navbar-logo-color: #fce8b2;
+$navbar-active-color: #b3e5fc;
+$navbar-logo-color: #b3e5fc;
 
 .navbar-inverse {
   margin-bottom: 0;
@@ -82,14 +83,63 @@ $navbar-logo-color: #fce8b2;
   }
 }
 
+.jumbotron {
+  background-color: #455a64;
+  color: #cfd8dc;
+  margin-bottom: 0;
+
+  .btn {
+    padding: 6px 24px;
+
+    &.btn-learn {
+      background-color: #455a64;
+      color: #cfd8dc;
+      border: 2px solid #cfd8dc;
+      margin-right: 10px;
+    }
+
+    &.btn-get {
+      background-color: #cfd8dc;
+      color: #455a64;
+      border: 2px solid #cfd8dc;
+    }
+  }
+
+  h1 {
+    font-size: 52px;
+    font-weight: 300;
+  }
+
+  a {
+    color: #b3e5fc;
+  }
+}
+
+.code-sample {
+  padding: 30px 0;
+
+  pre {
+    background-color: #f7f7f7;
+    height: 210px;
+  }
+}
+
 .feature {
   padding: 80px 0;
 
-  &.feature-default {
+  &.feature-0{
+    background-color: #ececec;
+
+    pre {
+      background-color: #ececec;
+    }
+  }
+
+  &.feature-1{
     background-color: #f7f7f7;
   }
 
-  &.feature-alt {
+  &.feature-2 {
     background-color: #fff;
   }
 }
