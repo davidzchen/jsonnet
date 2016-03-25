@@ -21,7 +21,7 @@
 #include <map>
 
 extern "C" {
-  #include "libjsonnet.h"
+  #include "include/libjsonnet.h"
 }
 
 namespace jsonnet {

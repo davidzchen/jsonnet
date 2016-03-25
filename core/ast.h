@@ -25,8 +25,8 @@ limitations under the License.
 #include <map>
 #include <vector>
 
-#include "lexer.h"
-#include "unicode.h"
+#include "core/lexer.h"
+#include "core/unicode.h"
 
 enum ASTType {
     AST_APPLY,

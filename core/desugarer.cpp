@@ -16,10 +16,10 @@ limitations under the License.
 
 #include <cassert>
 
-#include "ast.h"
-#include "lexer.h"
-#include "parser.h"
-#include "string_utils.h"
+#include "core/ast.h"
+#include "core/lexer.h"
+#include "core/parser.h"
+#include "core/string_utils.h"
 
 static const Fodder EF;  // Empty fodder.
 
@@ -63,7 +63,7 @@ BuiltinDecl jsonnet_builtin_decl(unsigned long builtin)
 }
 
 static constexpr char STD_CODE[] = {
-    #include "std.jsonnet.h"
+    #include "stdlib/std.jsonnet.h"
 };
 
 /** Desugar Jsonnet expressions to reduce the number of constructs the rest of the implementation

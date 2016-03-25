@@ -25,11 +25,11 @@ limitations under the License.
 #include <iomanip>
 
 
-#include "ast.h"
-#include "desugarer.h"
-#include "lexer.h"
-#include "parser.h"
-#include "static_error.h"
+#include "core/ast.h"
+#include "core/desugarer.h"
+#include "core/lexer.h"
+#include "core/parser.h"
+#include "core/static_error.h"
 
 
 std::string jsonnet_unparse_number(double v)

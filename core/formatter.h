@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef JSONNET_FORMATTER_H
 #define JSONNET_FORMATTER_H
 
-#include "ast.h"
+#include "core/ast.h"
 
 struct FmtOpts {
     char stringStyle;

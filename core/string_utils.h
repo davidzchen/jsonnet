@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef JSONNET_STRING_H
 #define JSONNET_STRING_H
 
-#include "lexer.h"
+#include "core/lexer.h"
 
 /** Unparse the string. */
 String jsonnet_string_unparse(const String &str, bool single);

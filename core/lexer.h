@@ -26,8 +26,8 @@ limitations under the License.
 #include <sstream>
 #include <vector>
 
-#include "unicode.h"
-#include "static_error.h"
+#include "core/unicode.h"
+#include "core/static_error.h"
 
 /** Whitespace and comments.
  *

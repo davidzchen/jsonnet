@@ -1,3 +1,16 @@
+#git_repository(
+#    name = "io_bazel_rules_jsonnet",
+#    remote = "https://github.com/bazelbuild/rules_jsonnet.git",
+#    tag = "0.0.1",
+#)
+local_repository(
+    name = "io_bazel_rules_jsonnet",
+    path = "/Users/dzc/Projects/bazelbuild/rules_jsonnet",
+)
+load("@io_bazel_rules_jsonnet//jsonnet:jsonnet.bzl", "jsonnet_repositories")
+
+jsonnet_repositories()
+
 new_http_archive(
     name = "gmock_archive",
     url = "https://googlemock.googlecode.com/files/gmock-1.7.0.zip",

@@ -19,12 +19,12 @@ limitations under the License.
 #include <set>
 #include <string>
 
-#include "desugarer.h"
-#include "parser.h"
-#include "state.h"
-#include "static_analysis.h"
-#include "string_utils.h"
-#include "vm.h"
+#include "core/desugarer.h"
+#include "core/parser.h"
+#include "core/state.h"
+#include "core/static_analysis.h"
+#include "core/string_utils.h"
+#include "core/vm.h"
 
 namespace {
 

@@ -28,11 +28,11 @@ extern "C" {
 #include "libjsonnet.h"
 }
 
-#include "desugarer.h"
-#include "formatter.h"
-#include "parser.h"
-#include "static_analysis.h"
-#include "vm.h"
+#include "core/desugarer.h"
+#include "core/formatter.h"
+#include "core/parser.h"
+#include "core/static_analysis.h"
+#include "core/vm.h"
 
 static void memory_panic(void)
 {

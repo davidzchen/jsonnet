@@ -16,8 +16,8 @@ limitations under the License.
 
 #include <iomanip>
 
-#include "string_utils.h"
-#include "static_error.h"
+#include "core/string_utils.h"
+#include "core/static_error.h"
 
 String jsonnet_string_unparse(const String &str, bool single)
 {

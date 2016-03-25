@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef JSONNET_DESUGARING_H
 #define JSONNET_DESUGARING_H
 
-#include "ast.h"
+#include "core/ast.h"
 
 /** Translate the AST to remove syntax sugar.
  */

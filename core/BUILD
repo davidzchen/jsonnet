@@ -6,7 +6,6 @@ cc_library(
         "unicode.h",
         "static_error.h",
     ],
-    includes = ["."],
 )
 
 cc_library(
@@ -16,7 +15,6 @@ cc_library(
     deps = [
         ":common",
     ],
-    includes = ["."],
 )
 
 cc_test(
@@ -53,10 +51,9 @@ cc_library(
         ":common",
         ":lexer",
         "//include:libjsonnet",
-        "//stdlib:std",
+        "//stdlib",
     ],
     linkopts = ["-lm"],
-    includes = ["."],
 )
 
 cc_library(

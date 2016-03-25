@@ -19,9 +19,9 @@ limitations under the License.
 #include <string>
 #include <sstream>
 
-#include "lexer.h"
-#include "static_error.h"
-#include "unicode.h"
+#include "core/lexer.h"
+#include "core/static_error.h"
+#include "core/unicode.h"
 
 static const std::vector<std::string> EMPTY;
 

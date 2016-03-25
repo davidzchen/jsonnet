@@ -16,9 +16,9 @@ limitations under the License.
 
 #include <typeinfo>
 
-#include "formatter.h"
-#include "string_utils.h"
-#include "unicode.h"
+#include "core/formatter.h"
+#include "core/string_utils.h"
+#include "core/unicode.h"
 
 static std::string unparse_id(const Identifier *id)
 {
